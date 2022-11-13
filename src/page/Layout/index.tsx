@@ -1,10 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import styles from './index.module.scss';
+import React, { useState, useRef, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import styles from './index.module.scss'
 import {
-  BarChartOutlined,
   HomeOutlined,
-  DollarOutlined,
   ApartmentOutlined,
   AuditOutlined,
   ClusterOutlined,
@@ -12,13 +10,14 @@ import {
   IdcardOutlined,
   UserOutlined,
   DownOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, Avatar, Dropdown } from 'antd';
+} from '@ant-design/icons'
+import type { MenuProps } from 'antd'
+import { Breadcrumb, Layout, Menu, Avatar, Dropdown } from 'antd'
+import axios from '../../api/index'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<MenuProps>['items'][number]
 
 function getItem(
   label: React.ReactNode,
@@ -31,19 +30,17 @@ function getItem(
     icon,
     children,
     label,
-  } as MenuItem;
+  } as MenuItem
 }
 
 const itemsMenu: MenuItem[] = [
   getItem('首页', '/', <HomeOutlined />),
-  getItem('权限', '/permission', <ApartmentOutlined />),
-  getItem('审批', '/approval', <AuditOutlined />),
-  getItem('组织结构', '/organization', <ClusterOutlined />),
-  getItem('社保', '/social', <IdcardOutlined />),
-  getItem('考勤', '/attendance', <CalendarOutlined />),
-  getItem('员工', '/role', <BarChartOutlined />),
-  getItem('薪资', '/salary', <DollarOutlined />),
-];
+  getItem('表格', '/table', <ApartmentOutlined />),
+  getItem('图表', '/chart', <AuditOutlined />),
+  getItem('动画', '/animation', <ClusterOutlined />),
+  getItem('轮播图', '/carousel', <IdcardOutlined />),
+  getItem('富文本', '/richText', <CalendarOutlined />),
+]
 
 const menu = (
   <Menu
@@ -58,30 +55,48 @@ const menu = (
       },
     ]}
   />
-);
-
-interface FileType {
-  name?: String;
-  type?: String;
-  lastModified?: Number;
-}
+)
 
 const LayoutPage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null)
 
-  const [collapsed, setCollapsed] = useState(false);
-  const [headerImg, setHeaderImg] = useState('');
-  const [name, setName] = useState('admin');
+  const [collapsed, setCollapsed] = useState(false)
+  const [headerImg, setHeaderImg] = useState('')
+  const [name, setName] = useState('admin')
 
-  const addClickImg = (e: any) => {
-    const fileObj: any = fileRef.current?.files;
-    // let formData = new FormData();
-    // formData.append('file', fileObj);
-    // formData.append('name', fileObj.name);
-    setHeaderImg(e.target.value);
-  };
+  const onUpdate = async () => {
+    // 需要修改头像
+    fileRef.current!.click()
+  }
+
+  const handelChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      // 获取选择的文件
+      const file = e.target.files![0]
+      // 需要上传这张图片
+      // const fd = new FormData()
+      // fd.append('image', file)
+      // 发送请求
+      const { data } = await axios.patch('/user', {
+        image: file.name,
+      })
+      console.log(data)
+      setHeaderImg(data.image)
+    } catch (err) {
+    } finally {
+    }
+  }
+
+  useEffect(() => {
+    const init = async () => {
+      const { data } = await axios.get('/layout')
+      console.log(data, 9)
+    }
+
+    init()
+  }, [])
 
   return (
     <>
@@ -90,8 +105,8 @@ const LayoutPage = () => {
           collapsible
           collapsed={collapsed}
           onCollapse={(value) => {
-            console.log(value);
-            setCollapsed(value);
+            console.log(value)
+            setCollapsed(value)
           }}
         >
           <div className={styles.logo}>
@@ -113,13 +128,13 @@ const LayoutPage = () => {
                 <DownOutlined />
               </div>
             </Dropdown>
-            <div className={styles.layout_header_img} onClick={addClickImg}>
+            <div className={styles.layout_header_img} onClick={onUpdate}>
               {headerImg === '' ? (
                 <Avatar size="large" icon={<UserOutlined />} />
               ) : (
                 <img src={headerImg} alt="" />
               )}
-              <input type="file" ref={fileRef} onChange={addClickImg} />
+              <input type="file" ref={fileRef} onChange={handelChange} hidden />
             </div>
           </Header>
           <Content style={{ margin: '0 16px' }}>
@@ -140,7 +155,7 @@ const LayoutPage = () => {
         </Layout>
       </Layout>
     </>
-  );
-};
+  )
+}
 
-export default LayoutPage;
+export default LayoutPage
