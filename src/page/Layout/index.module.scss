@@ -61,5 +61,23 @@
         }
       }
     }
+
+    .layout_content_warp {
+      margin: 0 16px;
+
+      .layout_content_bread {
+        margin: 0 16px;
+      }
+
+      .layout_content_container {
+        padding: 24px;
+        min-height: 100%;
+        background-color: #fff;
+      }
+
+      .layout_content_footer {
+        text-align: center;
+      }
+    }
   }
 }

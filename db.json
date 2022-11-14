@@ -1,51 +1,13 @@
 {
-  "layout": [
-    {
-      "id": 1,
-      "title": "首页",
-      "englishTitle": "home",
-      "pid": 0,
-      "icon": ""
-    },
-    {
-      "id": 2,
-      "title": "表格",
-      "englishTitle": "table",
-      "pid": 0,
-      "icon": ""
-    },
-    {
-      "id": 3,
-      "title": "图表",
-      "englishTitle": "chart",
-      "pid": 0,
-      "icon": ""
-    },
-    {
-      "id": 4,
-      "title": "动画",
-      "englishTitle": "animation",
-      "pid": 0,
-      "icon": ""
-    },
-    {
-      "id": 5,
-      "title": "轮播图",
-      "englishTitle": "carousel",
-      "pid": 0,
-      "icon": ""
-    },
-    {
-      "id": 6,
-      "title": "富文本",
-      "englishTitle": "richText",
-      "pid": 0,
-      "icon": ""
-    }
-  ],
   "user": {
     "id": 1,
     "name": "admin",
-    "image": "8a2d9e7a1bbc9f9db71765943e85e977.jpeg"
+    "image": "image.png",
+    "dataLikeList": [
+      { "title": "喜欢", "img": "", "num": 802 },
+      { "title": "收藏", "img": "", "num": 1003 },
+      { "title": "邮件", "img": "", "num": 321 },
+      { "title": "照片", "img": "", "num": 133 }
+    ]
   }
 }

@@ -1,23 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import styles from './index.module.scss'
+import React, { useState, useRef, useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import styles from './index.module.scss';
 import {
   HomeOutlined,
-  ApartmentOutlined,
-  AuditOutlined,
-  ClusterOutlined,
-  CalendarOutlined,
-  IdcardOutlined,
+  OrderedListOutlined,
+  AreaChartOutlined,
+  PlaySquareOutlined,
+  FileTextOutlined,
+  GatewayOutlined,
   UserOutlined,
   DownOutlined,
-} from '@ant-design/icons'
-import type { MenuProps } from 'antd'
-import { Breadcrumb, Layout, Menu, Avatar, Dropdown } from 'antd'
-import axios from '../../api/index'
+} from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import { Breadcrumb, Layout, Menu, Avatar, Dropdown } from 'antd';
+import axios from '../../api/index';
 
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Footer, Sider } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number]
+type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
   label: React.ReactNode,
@@ -30,17 +30,17 @@ function getItem(
     icon,
     children,
     label,
-  } as MenuItem
+  } as MenuItem;
 }
 
 const itemsMenu: MenuItem[] = [
   getItem('首页', '/', <HomeOutlined />),
-  getItem('表格', '/table', <ApartmentOutlined />),
-  getItem('图表', '/chart', <AuditOutlined />),
-  getItem('动画', '/animation', <ClusterOutlined />),
-  getItem('轮播图', '/carousel', <IdcardOutlined />),
-  getItem('富文本', '/richText', <CalendarOutlined />),
-]
+  getItem('表格', '/table', <OrderedListOutlined />),
+  getItem('图表', '/chart', <AreaChartOutlined />),
+  getItem('动画', '/animation', <PlaySquareOutlined />),
+  getItem('轮播图', '/carousel', <GatewayOutlined />),
+  getItem('富文本', '/richText', <FileTextOutlined />),
+];
 
 const menu = (
   <Menu
@@ -55,48 +55,45 @@ const menu = (
       },
     ]}
   />
-)
+);
 
 const LayoutPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const fileRef = useRef<HTMLInputElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const [collapsed, setCollapsed] = useState(false)
-  const [headerImg, setHeaderImg] = useState('')
-  const [name, setName] = useState('admin')
+  const [collapsed, setCollapsed] = useState(false);
+  const [headerImg, setHeaderImg] = useState('');
+  const [name, setName] = useState('admin');
 
   const onUpdate = async () => {
     // 需要修改头像
-    fileRef.current!.click()
-  }
+    fileRef.current!.click();
+  };
 
   const handelChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       // 获取选择的文件
-      const file = e.target.files![0]
+      const file = e.target.files![0];
       // 需要上传这张图片
       // const fd = new FormData()
       // fd.append('image', file)
       // 发送请求
       const { data } = await axios.patch('/user', {
         image: file.name,
-      })
-      console.log(data)
-      setHeaderImg(data.image)
+      });
+      console.log(data);
+      setHeaderImg(data.image);
     } catch (err) {
     } finally {
     }
-  }
+  };
 
   useEffect(() => {
-    const init = async () => {
-      const { data } = await axios.get('/layout')
-      console.log(data, 9)
-    }
+    const init = async () => {};
 
-    init()
-  }, [])
+    init();
+  }, []);
 
   return (
     <>
@@ -105,8 +102,8 @@ const LayoutPage = () => {
           collapsible
           collapsed={collapsed}
           onCollapse={(value) => {
-            console.log(value)
-            setCollapsed(value)
+            console.log(value);
+            setCollapsed(value);
           }}
         >
           <div className={styles.logo}>
@@ -132,30 +129,26 @@ const LayoutPage = () => {
               {headerImg === '' ? (
                 <Avatar size="large" icon={<UserOutlined />} />
               ) : (
-                <img src={headerImg} alt="" />
+                <Avatar src={headerImg} />
               )}
               <input type="file" ref={fileRef} onChange={handelChange} hidden />
             </div>
           </Header>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          <Content className={styles.layout_content_warp}>
+            <Breadcrumb className={styles.layout_content_bread}>
+              <Breadcrumb.Item>首页</Breadcrumb.Item>
             </Breadcrumb>
-            <div
-              className="site-layout-background"
-              style={{ padding: 24, minHeight: '100%', background: '#fff' }}
-            >
+            <div className={styles.layout_content_container}>
               <Outlet />
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className={styles.layout_content_footer}>
             Ant Design ©2018 Created by Ant UED
           </Footer>
         </Layout>
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default LayoutPage
+export default LayoutPage;
